@@ -4,8 +4,8 @@ from PIL import Image
 import whisper
 from transformers import AutoProcessor, AutoModelForImageTextToText
 
-processor = AutoProcessor.from_pretrained("deepseek-community/Janus-Pro-1B")
-model = AutoModelForImageTextToText.from_pretrained("deepseek-community/Janus-Pro-1B")
+processor = AutoProcessor.from_pretrained("deepseek-community/Janus-Pro-1B", trust_remote_code=True)
+model = AutoModelForImageTextToText.from_pretrained("deepseek-community/Janus-Pro-1B", trust_remote_code=True)
 whisper_model = whisper.load_model("base")
 
 def build_instruction(user_text):
@@ -38,7 +38,7 @@ def text_to_prompt(user_text):
     output = model.generate(**inputs, max_new_tokens=150) 
     generated_tokens = output[0][input_len:]
 
-    return processor.decode(generated_tokens, skip_special_tokens=True)
+    return processor.decode(generated_tokens, skip_special_tokens=True).strip()
 
 def image_text_to_prompt(image_path, user_text):
     image = Image.open(image_path)
@@ -54,7 +54,7 @@ def image_text_to_prompt(image_path, user_text):
     output = model.generate(**inputs, max_new_tokens=150)
     generated_tokens = output[0][input_len:]
 
-    return processor.decode(generated_tokens, skip_special_tokens=True)
+    return processor.decode(generated_tokens, skip_special_tokens=True).strip()
 
 def audio_to_prompt(audio_path):
     result = whisper_model.transcribe(audio_path)
