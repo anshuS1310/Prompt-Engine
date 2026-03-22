@@ -2,5 +2,5 @@ transformers
 torch
 openai-whisper
 Pillow
-gradio>=4.44.1
+gradio>=4.44.0
 huggingface_hub>=0.25.2
